@@ -1,0 +1,331 @@
+{% extends "users/navbar.html" %}
+
+{% block content %}
+
+<style>
+  /* @media (min-width: 768px) { */
+  .carousel-inner {
+    display: flex;
+    margin-top: 3rem;
+  }
+
+  .carousel-item {
+    height: 200px;
+    margin-right: 0;
+    flex: 0 0 25%;
+    display: block;
+  }
+
+  /* } */
+
+  .carousel-item img {
+    /* max-height: 200px; */
+    height: 11rem;
+    object-fit: contain;
+  }
+
+  .row {
+    --bs-gutter-x: 0rem
+  }
+
+  .card {
+    box-shadow: 0 5px 10px rgb(2 2 2 / 0.2);
+  }
+
+  .card:hover {
+    /* box-shadow: 0 0 5px 5px rgb(241, 241, 241); */
+    transform: translate(0px, -10px);
+    transition: transform 0.4s ease;
+  }
+
+  .card-img-top {
+    aspect-ratio: 15/16;
+  }
+
+  .trending_div:hover img{
+    /* transform: rotate(360deg); */
+    transform: scale(1.1);
+    transition: transform 0.5s ease;
+  }
+
+.chat-link {
+    cursor: pointer;
+    color: blue;
+    text-decoration: none;
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 1000; /* Ensure the chat button is above other elements */
+}
+
+.chat-link:hover {
+    color: darkblue;
+}
+
+h5 {
+    text-align: end;
+    margin: 0px;
+    position: relative;
+    top: 36px;
+    right: 36px;
+    color: red;
+}
+
+/* Container for the iframe */
+.chat-iframe-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 385px;
+    height: 70%;/* Adjust the height as needed */
+    display: none; /* Initially hide the container */
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1001; /* Ensure the iframe container is above the chat button */
+}
+
+/* Close button for the iframe container */
+.close-iframe-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+</style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
+
+
+
+
+<div class="row">
+  <!-- corousal -->
+  <div class="row p-0">
+    <div id="carouselExampleIndicators" onmouseover="Stopcrousal()" onmouseout="startcrousal()" class="carousel slide"
+      data-bs-ride="carousel" style="background-color: #421200; height: 19rem; ">
+
+      <div class="carousel-inner" style="height: 15rem;">
+
+        {% for item in data.category %}
+        {% if item.categoryImage != '/static/No_Image.jpg' %}
+        <div class="carousel-item" data-bs-interval="1500" style="display: block;">
+          <a href="/search/bycategory/?categoryid={{item.id}}" class="d-flex flex-column align-items-center">
+            <img src="{{item.categoryImage}}" class="d-block w-100" alt="No Image">
+            <strong style="color:var(--yellow) ;">{{item.name}}</strong>
+          </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev" style="height:17rem;width:8%">
+        <!-- <span class="carousel-control-prev-icon" aria-hidden="true" style="font-weight: 600;"></span> -->
+        <h1><i class="fa-solid fa-angle-left" style="color: #ffffff;position: absolute; left: 15px;"></i></h1>
+      </button>
+      <button class="carousel-control-next" type="button" id="nextbutton" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next" style="height:17rem; width:8%">
+        <h1><i class="fa-solid fa-angle-right" style="color: #ffffff; position: absolute; right: 15px;"></i></h1>
+      </button>
+    </div>
+  </div>
+  <!-- corousal ends-->
+
+
+
+  <!-- <h5 style="text-align: end; margin: 0px; position: relative; top: 36px; right: 36px; color: red;"><a
+      href="/checkout/"><span style="font-size: 30px;">💰</span> Donate us...</a></h5> -->
+
+  <h5 style="text-align: end; margin: 0px; position: relative; top: 36px; right: 36px; color: red;">
+    <a data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer"  ><span style="font-size: 30px; ">💰</span> Donate us...</a>
+  </h5>
+
+  <div id="wrapped-code" class="wrapped-code-class">
+  <!-- <h5>
+    <a href="https://chatterbot.softprodigyphp.in/" class="chat-link">
+        <span style="font-size: 30px; cursor: pointer;">💬</span> Chat with Us
+    </a>
+</h5> -->
+
+
+
+</div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <form method="post" action="/checkout/">
+          {% csrf_token %}
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="amount" class="col-form-label">Enter the amount to donate in range(1-999999):</label>
+              <input type="text" class="form-control" id="amount" name="amount">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="row p-3">
+    <div class="row " style="margin-bottom: -1rem;">
+      <h3>Trending Recipes</h3>
+      <hr>
+    </div>
+
+
+
+    <div class="row d-flex justify-content-center">
+      {% for item in trending_recipe %}
+      <div class=" col-sm-2 trending_div" style="margin: 2.2rem 1.8rem; width: 16rem;">
+        <a href="/recipe/description/?id={{item.id}}">
+          <img class="card-img-top rounded-circle trending_img" src="{{item.thumbnail}}"
+            style="border: 10px solid white ; object-fit: cover; height:15rem; width:15rem" alt="No Image">
+          <div class="row recipe-edit" style="padding: 8px; height: 100%; ">
+            <center>
+              <h6 class="card-text m-1">{{item.name}}</h6>
+            </center>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+
+
+
+    <div class="row " style="margin-bottom: -2rem;">
+      <h3>Recipes</h3>
+      <hr>
+    </div>
+    <div class="row d-flex justify-content-center">
+      {% for item in data.recipe.results %}
+      <div class="card col-sm-2" style="margin: 2rem 2rem; width: 19rem;">
+        <a href="/recipe/description/?id={{item.id}}">
+          <img class="card-img-top" src="{{item.thumbnail}}"
+            style="border-radius: 5px ; object-fit: cover; height:17rem" alt="No Image">
+          <div class="row recipe-edit" style="padding: 8px; height: 100%; ">
+            <center>
+              <h6 class="card-text m-1">{{item.name}}</h6>
+            </center>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+
+    <!-- pagination -->
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="?page=1">first</a></li>
+
+        {% if data.recipe.previous %}
+
+        <li class="page-item">
+          <a class="page-link" href="{{data.recipe.previous}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{data.recipe.page | add:'-1'}}">{{data.recipe.page|add:"-1" }}</a></li>
+
+
+
+        <li class="page-item"><a class="page-link" href="#">{{data.recipe.page}}</a></li>
+        {% endif %}
+
+        {% if data.recipe.next %}
+
+        <li class="page-item"><a class="page-link"
+            href="?page={{data.recipe.page | add:'+1'}}">{{data.recipe.page|add:"+1"}}</a></li>
+        <li class="page-item">
+          <a class="page-link" href="{{data.recipe.next}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="?page={{data.recipe.last_page}}">last</a></li>
+
+      </ul>
+    </nav>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<script>
+// Assuming iframe has an id "myIframe"
+  var iframe = document.getElementById('myIframe');
+  iframe.contentWindow.postMessage('startSpeechRecognition', '*');
+
+  // Assuming iframe has an id "myIframe"
+  
+  var carouselWidth = $(".carousel-inner")[0].scrollWidth;
+  var cardWidth = $(".carousel-item").width();
+  var scrollPosition = 0;
+  $(".carousel-control-next").on("click", function () {
+    console.log(cardWidth, carouselWidth);
+
+    if (scrollPosition < (carouselWidth - cardWidth * 4)) { //check if you can go any further
+      scrollPosition += cardWidth;  //update scroll position
+      $(".carousel-inner").animate({ scrollLeft: scrollPosition }, 700); //scroll left
+    }
+  });
+  $(".carousel-control-prev").on("click", function () {
+    if (scrollPosition > 0) {
+      scrollPosition -= cardWidth;
+      $(".carousel-inner").animate(
+        { scrollLeft: scrollPosition },
+        700
+      );
+    }
+  });
+
+
+
+  let myInterval;
+  function elementclick() {
+    document.getElementById("nextbutton").click();
+  }
+
+  function startcrousal() {
+    myInterval = setInterval(elementclick, 1700);
+  }
+
+  function Stopcrousal() {
+    clearInterval(myInterval);
+  }
+
+  startcrousal();
+</script>
+
+
+{% endblock %}

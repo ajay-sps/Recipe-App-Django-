@@ -1,0 +1,45 @@
+{% extends 'navbar_sidebar.html' %}
+
+{% block content %}
+<style>
+  H5{
+    margin-bottom:0px;
+  }
+</style>
+
+<div class="row p-5" >
+    <h3>User Requests :</h3>
+    <hr>
+    {% if messages %}
+            {% for message in messages %}
+            <center>
+                <h6 style="color: green;padding-bottom: 4px;">{{message}}</h6>
+            </center>
+            {% endfor %}
+            {% endif %}
+
+    {% if data %}
+    {% for item in data %}
+
+    <div class="card m-3">
+    <form action="/adminuser/requests/updatestatus/" method="get">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <p>Date : {{item.creation_date}}</p>
+
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Name: {{item.user.first_name}}&nbsp{{item.user.last_name}} </h5>
+        <p class="card-text">Description: {{item.description}}</p>
+        <!-- <a href="/adminuser/requests/updatestatus/?id={{item.id}}" class="btn btn-primary">Update Status</a> -->
+      </div>
+      </form>
+    </div>
+    {% endfor %}
+    {% else %}
+<h3 style="color: grey; margin:13%">No records found :(</h3>
+{% endif %}
+
+</div>
+
+
+{% endblock %}

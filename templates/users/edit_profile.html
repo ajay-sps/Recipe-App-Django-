@@ -1,0 +1,264 @@
+{% extends "users/navbar.html" %}
+
+{% block content %}
+
+<style>
+    .account-settings .user-profile {
+        margin: 5rem 0 1rem 0;
+        padding-bottom: 1rem;
+        text-align: center;
+    }
+
+    .account-settings .user-profile .user-avatar {
+        margin: 0 0 1rem 0;
+    }
+
+    .account-settings .user-profile .user-avatar img {
+        width: 150px;
+        height: 150px;
+        -webkit-border-radius: 100px;
+        -moz-border-radius: 100px;
+        border-radius: 100px;
+        /* border: 20px  ; */
+        border: 5px solid var(--orange);
+        /* box-shadow: rgba(255, 8, 8, 0.649) 0px 5px 15px; */
+    }
+
+    .account-settings .user-profile h5.user-name {
+        margin: 0 0 0.5rem 0;
+    }
+
+    .account-settings .user-profile h6.user-email {
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #9fa8b9;
+    }
+
+    .account-settings .about {
+        margin: 2rem 0 0 0;
+        text-align: center;
+    }
+
+    .account-settings .about h5 {
+        margin: 0 0 15px 0;
+        color: #007ae1;
+    }
+
+    .account-settings .about p {
+        font-size: 0.825rem;
+    }
+
+    .form-control {
+        border: 1px solid #cfd1d8;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        font-size: .825rem;
+        background: #ffffff;
+        color: #2e323c;
+    }
+
+    .card {
+        background: #ffffff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        border: 0;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .text-primary {
+        color: var(--brown) !important;
+    }
+
+    .btn-primary {
+        background-color: var(--brown) !important;
+        border: none
+    }
+
+    textarea,
+    input {
+        border-radius: 7px !important;
+    }
+</style>
+
+<div class="container">
+    <div class="container pt-4" style="background-color: #E7E9EB;">
+        <nav class="d-flex">
+            <h6 class="mb-0">
+                <a href="/home">Home</a>
+                <span class=" mx-2"> > </span>
+                <a href="/profile">profile</a>
+                <span class=" mx-2"> > </span>
+               <u>edit profile</u>
+            </h6>
+        </nav>
+    </div>
+
+    <div class="row">
+        <h3 style="margin-top: 2rem;">Edit Profile </h3>
+        <hr>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <center>
+        <h6 style="color: green;padding-bottom: 4px;">{{message}}</h6>
+    </center>
+    {% endfor %}
+    {% endif %}
+
+
+    {{ errors }}
+    {% for i, j in errors.items  %}
+    <center>
+        <h6 style="color: rgb(255, 0, 0);padding-bottom: 4px;">{{j.0}}</h6>
+    </center>
+    {% endfor %}
+    {% for key,value in errors.items %}
+    <h6 style="color:red">{{value.0}}</h6>
+    {% endfor %}
+
+    
+
+    <div class="row  gutters" style="margin: 5rem; margin-top: 1rem;">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar" >
+                                <img src="/{{data.userprofile.profilePic}}" alt="No Image">
+                            </div>
+                            <h5 class="user-name">{{data.first_name}}&nbsp{{data.last_name}}</h5>
+                            <h6 class="user-email">{{data.username}}</h6>
+                        </div>
+                        <div class="about">
+                            <h5 class="text-primary">About</h5>
+                            {% if data.userprofile.about %}
+                            <p>{{data.userprofile.about}}</p>
+                            {% else %}
+                            <p>Please Update your bio</p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-1 mt-3 text-primary">Personal Details</h6>
+                                <hr>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" value="{{data.first_name}}" name="first_name"
+                                        class="form-control" id="firstName" placeholder="Enter first name" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" value="{{data.last_name}}" name="last_name" class="form-control"
+                                        id="lastName" placeholder="Enter last name">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" value="{{data.userprofile.phone}}" name="phone"
+                                        class="form-control" id="phone" pattern="[1-9]{1}[0-9]{9}"
+                                        placeholder="Enter phone number">
+
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="profession">Profession</label>
+                                    <input type="text" value="{{data.userprofile.profession}}" name="profession"
+                                        class="form-control" id="profession" placeholder="Enter profession">
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <label style="float: left;" for="exampleFormControlTextarea1">
+                                    About yourself</label>
+                                <textarea class="form-control" style="max-height: 300px; height: 70px;"
+                                    id="exampleFormControlTextarea1" 
+                                    name='about'>{{data.userprofile.about}}</textarea>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="profession">Profile picture</label><br><br>
+                                    <input data-required="image" type="file" name="profilePic" id="imgInp"
+                                        class="image-input" required data-traget-resolution="image_resolution" 
+                                        style="border-radius: 0px !important;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mt-5 mb-1 mt-3 text-primary">Residential Details</h6>
+                                <hr>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" value="{{data.userprofile.address}}" name='address'
+                                        class="form-control" id="address" placeholder="Enter Address">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="ciTy">City</label>
+                                    <input type="text" value="{{data.userprofile.city}}" name="city"
+                                        class="form-control" id="ciTy" placeholder="Enter City">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="sTate">State</label>
+                                    <input type="text" value="{{data.userprofile.state}}" name="state"
+                                        class="form-control" id="sTate" placeholder="Enter State">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="zIp">Zip Code</label>
+                                    <input type="text" name="zip" class="form-control"
+                                        id="zIp" placeholder="Zip Code" pattern="[1-9]{1}[0-9]{5}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="text-right">
+                                    <button type="submit" onclick="window.location.href = '/profile'" id="submit"
+                                        class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" id="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

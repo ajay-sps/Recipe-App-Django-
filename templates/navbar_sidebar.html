@@ -1,0 +1,216 @@
+<!-- Navbar and sidebar-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body style="background-color: #fff6eb;">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+
+
+  <script src="https://kit.fontawesome.com/3dc58e41e7.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --yellow: #FFC300;
+      --orange: #FF7518;
+      --light_orange: #FBCEB1;
+      --dark_orange: #FF5733;
+      --brown: rgb(77, 31, 31);
+    }
+
+    .btn-primary {
+      background-color: var(--brown) !important;
+      border: none
+    }
+
+    .main_nav {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
+    .sidebar {
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: auto;
+      background-color: #F8F9FA;
+      transition: all 0.3s ease;
+      position: fixed;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding-left: 20px;
+    }
+
+    .sidebar-item {
+      padding: 15px;
+      display: flex;
+      align-items: center;
+
+    }
+
+    .sidebar-item a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .sidebar-item i {
+      font-size: 2rem;
+      font-weight: 500;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+
+    }
+
+    .sidebar-item:hover {
+      /* background-color: burlywood; */
+      background-color: rgb(122, 49, 49)
+    }
+
+    /* recipe search bar */
+    .search {
+      margin: 0.5rem 0rem;
+      position: relative;
+      /* box-shadow: 0 0 40px rgba(51, 51, 51, .1); */
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a:hover {
+      color: brown
+    }
+
+    .search input {
+      height: 60px;
+      text-indent: 25px;
+      border: 2px solid #d6d4d4;
+    }
+
+    .search input:focus {
+      box-shadow: none;
+      border: 2px solid rgb(255, 136, 0);
+    }
+
+    .search .fa-search {
+      position: absolute;
+      top: 20px;
+      left: 16px;
+    }
+
+    .search button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      height: 50px;
+      width: 110px;
+      background: rgb(255, 136, 0);
+
+    }
+
+    /* .btn-success {
+      color: #fff;
+      background-color: #00ab5c;
+      border-color: #198754;
+      height: 56px;
+    } */
+  </style>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <nav class=" main_nav nav navbar navbar-expand-lg" style="padding:0; z-index: 1;
+      background-color: #ffac81;
+  background-image: linear-gradient(315deg, #ffac81 0%, #ff928b 74%);">
+
+        <div>
+          <a class="navbar-brand  d-flex align-items-center" href="/adminuser/recipe/">
+            <img src="/static/logo.png" height="40px" style="padding-left: 1rem; margin: 0.2rem;" alt="Logo"
+              loading="lazy" />
+          </a>
+        </div>
+
+        <div>
+          <h5 class="text-white mx-4"> Hello Admin &nbsp <a href="/logout"><i class="fa-solid fa-right-from-bracket" title="Logout" style="color: #ffffff;"></i></a></h5>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-2">
+      <div class="sidebar" style="background-color: rgb(77, 31, 31) ; width: 13%; ">
+        <a href="/home" style="color: white;">
+        <div style="color: white;" class="sidebar-item">
+          <i class='bx bxs-widget' style="font-size: 2.5rem;"></i>&nbsp View UserPanel
+        </div></a>
+
+        <a href="/adminuser/category/" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bx-layer nav_logo-icon'></i> &nbsp Category
+          </div>
+        </a>
+        <a href="/adminuser/ingredient/" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bx-bowl-rice'></i> &nbsp Ingredients
+
+          </div>
+        </a>
+        <a href="/adminuser/recipe/" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bx-dish'></i> &nbsp Recipes
+          </div>
+        </a>
+        <a href="/adminuser/requests/" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bxs-hourglass-top'></i> &nbsp Requests
+          </div>
+        </a>
+        <a href="/adminuser/approvals" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bx-message-square-dots'></i> &nbsp Approvals
+          </div>
+        </a>
+        <a href="/adminuser/reports/" style="color: white;">
+          <div class="sidebar-item">
+            <i class='bx bxs-report'></i> &nbsp Reports
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-10 p-3 ">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+
+  </div>
+
+
+
+</body>
+
+</html>

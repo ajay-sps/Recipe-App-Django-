@@ -1,0 +1,91 @@
+{% extends "users/navbar.html" %}
+{% block content %}
+
+<style>
+  .card:hover {
+    /* transform: rotate(360deg); */
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+    box-shadow: 0 13px 10px rgb(2 2 2 / 0.2);
+  }
+  .card{
+    box-shadow: 0 5px 10px rgb(2 2 2 / 0.2);
+
+  }
+</style>
+{% if data.results %}
+<div class="row p-5">
+
+        <div class="row p-1">
+            <h4>Category : {{data.0.category}}</h4>
+            <hr>
+        </div>
+        <div class="row d-flex justify-content-center">
+        {% for item in data.results %}
+        <div class="card col-sm-3" style="padding: 0px; margin: 2rem 2rem; width: 18rem;">
+            <a href="/recipe/description/?id={{item.id}}">
+
+                <img class="card-img-top" src="{{item.thumbnail}}"
+                    style="border-radius: 5px ; object-fit: cover; height:17rem; width: 18rem;" alt="No Image">
+                <div class="row recipe-edit" style="padding: 8px; height: 100%; ">
+                    <center>
+                        <h6 class="card-text m-1">{{item.name}}</h6>
+                    </center>
+                    <!-- <div class="d-flex justify-content-between">
+                <div>
+                    <p style="color: rgb(134, 134, 141); font-weight: 500;" class="card-text">Category:
+                        {{item.category_name}}</p>
+                </div>
+            </div> -->
+                </div>
+            </a>
+        </div>
+        
+        {% endfor %}
+      </div>
+        <!-- pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="?categoryid={{data.categoryid}}&page=1">first</a></li>
+      
+              {% if data.previous %}
+      
+              <li class="page-item">
+                <a class="page-link" href="{{data.previous}}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" href="?categoryid={{data.categoryid}}&page={{data.page | add:'-1'}}">{{ data.page|add:"-1" }}</a></li>
+      
+      
+      
+              <li class="page-item"><a class="page-link" href="#">{{data.page}}</a></li>
+              {% endif %}
+      
+              {% if data.next %}
+      
+              <li class="page-item"><a class="page-link"
+                  href="?categoryid={{data.categoryid}}&page={{data.page | add:'+1'}}">{{data.page|add:"+1"}}</a></li>
+              <li class="page-item">
+                <a class="page-link" href="{{data.next}}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+              {% endif %}
+              <li class="page-item"><a class="page-link" href="?categoryid={{data.categoryid}}&page={{data.last_page}}">last</a></li>
+      
+            </ul>
+          </nav>
+        <!-- pagination ends -->
+
+</div>
+
+{% else %}
+<h3 style="color: grey; margin:13%">No records found :(</h3>
+{% endif %}
+
+
+
+{% endblock %}

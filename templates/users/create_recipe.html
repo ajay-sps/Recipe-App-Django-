@@ -1,0 +1,273 @@
+{% extends "users/navbar.html" %}
+
+{% block content %}
+<style>
+  .card {
+    padding: 30px 40px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    border: none !important;
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2)
+  }
+
+
+  .form-control-label,
+  label {
+    margin-top: 15px;
+    align-self: self-start;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 8px 15px;
+    border-radius: 5px !important;
+    margin: 5px 0px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    font-size: 18px !important;
+    font-weight: 300;
+    height: 40px;
+    box-shadow: none;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+
+    border: 3px solid #ff8d36 !important;
+    outline-width: 0;
+    font-weight: 400;
+    box-shadow: none !important;
+
+  }
+
+
+  /* upload image */
+
+  .image-upload {
+    width: 60%;
+    height: 250px;
+    border: 1px dashed #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: center;
+    background: #f8f8f9;
+    color: #666;
+    overflow: hidden;
+  }
+
+
+  .image-upload i {
+    font-size: 6em;
+    color: #ccc;
+  }
+
+
+  .image-upload input {
+    cursor: pointer;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* body{
+    background-image: url(/static/createRecipe.jpg);
+    object-fit: cover;
+  } */
+</style>
+
+
+<div class="row">
+  <img src="/static/createRecipe.jpg" alt="" style="position: fixed; object-fit: revert;">
+  <div class="container-fluid  px-1 py-5 mx-auto">
+    <div class="row  d-flex justify-content-center">
+      <div class="col-sm-7 text-center">
+        <div class="card " style="box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.2), 16px 16px 29px 0 rgba(0, 0, 0, 0.19);">
+          <h3 class="text-center mb-4">Create Recipe</h3>
+
+          <h5 class="text-success">{{message}}</h5>
+          <form class="form-card" method='post' enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- image upload -->
+            <center>
+              <div class="row image-upload m-4">
+                <img id="blah" src="" alt="" style="height: 250px ; display : none;"
+                  class="img-fluid recipeImg uploaded-image">
+
+                <label id="label" style="cursor: pointer;" for="file_upload">
+                  <div class=" h-100" style="margin-top:2em;">
+                    <i class="fa fa-cloud-upload"></i>
+                    <h5><b>Choose Your Image to Upload</b></h5>
+                    <h6 class="mt-10 mb-70">Or Drop Your Image Here</h6>
+                  </div>
+                  <input data-required="image" type="file" name="thumbnail" id="imgInp" class="image-input"
+                    data-traget-resolution="image_resolution" value="" required>
+                </label>
+              </div>
+            </center>
+            <!-- image upload ends -->
+
+            <div class="row justify-content-between text-left">
+              <div class="form-group col-sm-6 flex-column d-flex">
+                <label class="form-control-label px-3">Recipe Name<span class="text-danger"> *</span></label>
+                <input type="text" name="name" value="{{values.name}}" required placeholder="Enter Recipe name">
+              </div>
+
+              <div class="col-sm-6">
+                <label class="form-control-label px-3">Choose Category<span class="text-danger"> *</span></label>
+
+                <select class="form-select " aria-label=".form-select-sm example" name='category' required>
+                  <option selected disabled value="">Select Category</option>
+
+                  {% for item in data %}
+                  <option required value="{{item.id}}">{{item.name}}</option>
+                  {% endfor %}
+
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class=" px-3" style="float: left;" for="exampleFormControlTextarea1">Instructions <span
+                    class="text-danger"> *</span></label>
+                <textarea class="form-control" required style="max-height: 300px; height: 100px;"
+                  id="exampleFormControlTextarea1" value="{{values.description}}" name='description'></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class=" px-3" style="float: left;" for="videolink">Youtube video Link (optional)</label>
+                <input type="url" class="form-control" value="{{values.youtube_link}}" name="youtube_link"
+                  id="videolink">
+              </div>
+
+
+
+
+              <div class="row ingredients" id="ingredients" style="margin-top: 2%;">
+                <div class="row " style="float: right;">
+                  <label class="col-sm-3 mx-2" onclick="AddFields()"
+                    style="text-align: center;align-items: center;display: flex;">Add Ingredient<i
+                      class='bx bx-plus edit' style="color: var(--orange) ;  font-size: 30px;"
+                      title="Add Ingredient"></i>
+                  </label>
+                  <label class="col-sm-4" style="float: left;" for="videolink">Ingredient Name :</label>
+                  <label class="col-sm-3" style="float: left;" for="videolink">Quantity :</label>
+                </div>
+
+                <div class="row ingredients">
+                  <div class="row">
+                    <div class="col-sm-4 offset-4" id="textField"> <input required type="text" name="ingredient"
+                        style="width: 100%;"></div>
+                    <div class="col-sm-3" id="valueField"><input required type="text" name="quantity"
+                        style="width: 100%;"></div>
+                  </div>
+                </div>
+
+
+
+              </div>
+              <input type="hidden" name="user" value="{{user.id}}">
+              <div class="row">
+                <div class="form-group col-sm-12 my-3 "> <button data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    type="submit" class="w-100 p-2 rounded btn-primary"
+                    style="background-color:var(--orange); margin-left: 0.8rem; border: none;">send for
+                    approval</button>
+                </div>
+                <!-- loader -->
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                      <div class="modal-body">
+                        <div style="margin:5rem 10rem ;height: 50px;width: 50px;" class="spinner-border text-primary" role="status">
+                          <span style="font-size: 40px;" class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- loader end -->
+
+                
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script>
+
+  imgInp.onchange = evt => {
+    const [file] = imgInp.files
+    if (file) {
+      blah.src = URL.createObjectURL(file);
+      document.getElementById("blah").style.display = "block";
+    }
+  }
+
+
+
+  function AddFields() {
+    var TextContainer = document.getElementById("textField")
+    var valueContainer = document.getElementById("valueField")
+    // var cross = document.getElementById("cross")
+    var parent = document.getElementById('ingredients')
+
+
+    var div_row = document.createElement('div')
+    div_row.className = "row"
+    parent.appendChild(div_row)
+
+
+    var ingredient_field = document.createElement('input')
+    ingredient_field.className = "col-sm-4 offset-4"
+    ingredient_field.type = "text"
+    ingredient_field.name = "ingredient"
+    ingredient_field.style.width = "30%"
+    div_row.appendChild(ingredient_field)
+
+    var quantity_field = document.createElement('input')
+    quantity_field.className = "col-sm-3"
+    quantity_field.type = "text"
+    quantity_field.name = "quantity"
+    quantity_field.style.width = "21%"
+    quantity_field.style.marginLeft = "1.8rem"
+
+    div_row.appendChild(quantity_field)
+
+
+    var delete_icon = document.createElement('i')
+    delete_icon.className = "fa-solid fa-xmark crosss px-1 col-sm-1"
+    delete_icon.style.color = "#ff6600"
+    delete_icon.style.marginTop = "15px"
+    delete_icon.onclick = deleteRow
+
+    div_row.appendChild(delete_icon)
+
+  }
+
+  function deleteRow() {
+
+    $(document).on('click', '.crosss', function () { this.parentNode.remove() });
+
+  }
+
+
+</script>
+
+{% endblock %}

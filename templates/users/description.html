@@ -1,0 +1,557 @@
+<!-- Jumbotron -->
+
+{% extends 'users/navbar.html' %}
+
+{% block content %}
+{% load social_share %}
+
+<!-- Jumbotron -->
+
+<style>
+    .product-rating {
+        font-size: 35px;
+    }
+
+    .star i {
+        font-size: 18px;
+        color: #cad100;
+    }
+
+
+
+    div.stars {
+
+        width: 21rem;
+        display: inline-block;
+
+    }
+
+    .mt-200 {
+        margin-top: 200px;
+    }
+
+    input.star {
+        display: none;
+    }
+
+
+
+    label.star {
+
+        float: right;
+
+        padding: 10px;
+
+        font-size: 36px;
+
+        color: #ff5900;
+
+        transition: all .2s;
+
+    }
+
+
+
+    input.star:checked~label.star:before {
+
+        content: '\f005';
+
+        color: #FD4;
+
+        transition: all .25s;
+
+    }
+
+
+    input.star-5:checked~label.star:before {
+
+        color: #FE7;
+
+        text-shadow: 0 0 20px #952;
+
+    }
+
+    input.star-1:checked~label.star:before {
+        color: #F62;
+    }
+
+    label.star:hover {
+        transform: rotate(-15deg) scale(1.3);
+    }
+
+    label.star:before {
+
+        content: '\f006';
+
+        font-family: FontAwesome;
+
+
+    }
+
+    i {
+        font-size: 20px;
+    }
+
+    /* share module */
+    .share-collapse {
+        position: absolute;
+        top: 720px;
+        right: -265px;
+        left: 345px;
+        transition: all 0.4s ease;
+        display: block;
+    }
+</style>
+
+
+<div>
+    <div class="container pt-4" style="background-color: #E7E9EB;">
+        <nav class="d-flex">
+            <h6 class="mb-0">
+                <a href="/home">Home</a>
+                <span class=" mx-2"> > </span>
+                <u>Details</u>
+            </h6>
+        </nav>
+    </div>
+</div>
+
+</header>
+<!-- <a href="#comments">go to comments</a> -->
+<!-- content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row gx-5">
+            <aside class="col-lg-6">
+                <div class="d-flex justify-content-center align-items-center "
+                    style=" background-color: white; margin: 1rem 7rem; width: 26rem; height: 26rem;  border-radius: 15px;">
+
+                    <img style="width: 22rem; height: 22rem;  border-radius: 15px;" class="fit"
+                        src="{{data.thumbnail}}" />
+                </div>
+            </aside>
+
+            <main class="col-lg-6">
+                <div class="ps-lg-3">
+                    <h4 class="title text-dark">
+                        {{data.name}}
+                    </h4>
+
+                    <div class="bg-warning p-2 rounded" style="background: rgb(209,226,0);
+                    background: linear-gradient(90deg, rgba(209,226,0,1) 0%, #fff6eb 99%);">
+                        <span class="h6">Category :</span>
+                        <span id="category">{{data.category}}</span>
+                    </div><br>
+                    <span class="h6">Author :</span>
+                    <span id="category">{{data.creator}}</span><br>
+                    <span class="h6">Date :</span>
+                    <span id="category">{{data.dateModified}}</span><br><br>
+                    <p>
+                        “Food for us comes from our relatives, whether they have wings or fins or roots. That is how we
+                        consider food. Food has a culture. It has a history. It has a story. It has relationships.” </p>
+
+                    <hr />
+                    <div class="ratings">
+                        <div class="d-flex align-items-center">
+                            <div>
+                            <span class="product-rating">{{data.calculated_rating}}</span>
+                            <span>/5</span>
+                            </div>
+                            <img class="px-2" src="https://img.icons8.com/?size=512&id=19417&format=png" style="height:3rem">
+                        </div>
+                        <!-- <div class="star">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div> -->
+
+                        <div class="rating-text">
+                            <span>{{data.review_count}} ratings & reviews</span>
+                        </div><br>
+                    </div>
+
+
+                    {% if data.isFavourite %}
+                    <a href="/favourites" class="btn btn-success p-3" style="margin-right :1rem; border:none"> <b>View
+                            in favourite &nbsp</b></a>
+
+                    {% else %}
+                    <a onclick="addtofavourite('{{data.id}}')" class="btn btn-danger p-3"
+                        style="margin-right :1rem; border:none"> <b>Add to favourite &nbsp</b><i
+                            class="fa-solid fa-heart" style="color: #ffffff;"></i></a>
+                    {% endif %}
+
+                    <button type="button" class="btn btn-secondary p-3" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        <i class="fa-solid fa-share fa-lg"></i>&nbspShare
+                    </button>
+
+                    <!-- Modal -->
+
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <h5 style="text-align: center; padding-top: 50px;">Share this with your social Community
+                                </h5>
+                                <div class="modal-body d-flex justify-content-center">
+
+
+                                    {% post_to_facebook object_or_url '<img src="https://img.icons8.com/?size=512&id=uLWV5A9vXIPu&format=png" alt="" style="height: 60px;">'%}
+                                    {% post_to_whatsapp object_or_url '<img src="https://img.icons8.com/?size=512&id=AltfLkFSP7XN&format=png" alt="" style="height: 60px;">' %}
+                                    {% post_to_telegram "Great Recipe: " object_or_url '<img src="https://img.icons8.com/?size=512&id=oWiuH0jFiU0R&format=png" alt="" style="height: 60px;">' %}
+                                    {% post_to_twitter "Great Recipe: . Check it out!" object_or_url '<img src="https://img.icons8.com/?size=512&id=bUGbDbW2XLqs&format=png" alt="" style="height: 60px;">' %}
+                                    {% send_email 'Yummy Recipe' "Have a look at this delicious recipe" object_or_url '<img src="https://img.icons8.com/?size=512&id=eFPBXQop6V2m&format=png" alt="" style="height: 60px;">' %}
+
+
+
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+<!-- content -->
+
+<!-- description Ingredient -->
+
+<section class="border-top py-4">
+    <div class="container">
+        <div class="row gx-4">
+            <div class="col-lg-8 mb-4">
+                <div class="border rounded-2 px-3 py-2 bg-white">
+                    <!-- Pills navs -->
+
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#description" aria-expanded="true" aria-controls="description"
+                        style="box-shadow: none; width: 48%; margin: 0% 1%; background-color: rgb(231, 84, 43); border:none"">Instructions</button>
+                    <button class=" btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#ingredients" aria-expanded="true" aria-controls="description ingredients"
+                        style="box-shadow: none; width: 48%; background-color: rgb(231, 84, 43); border:none"">Ingredients</button>
+                    <div class=" collapse multi-collapse show" id="description">
+                        <div class="card card-body">
+                            {{data.description}}
+                        </div>
+                </div>
+                <div class="collapse multi-collapse show" id="ingredients">
+                    <div class="card card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ingredient</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for k,v in data.ingredients.items %}
+                                <tr>
+                                    <th scope="row">{{k}}</th>
+                                    <td>{{v}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Pills content -->
+
+
+
+                <!-- youtube_link -->
+
+                {% if data.youtube_link %}
+                <div class="card" style="margin: 1rem 0rem;text-align: center ; color: brown;">
+                    <div class="card-body">
+                        <h5>To watch video tutorial, Click on <a href="{{data.youtube_link}}" target="_blank"><img
+                                    src="/static/youtube.png" alt="youtube icon" height="50px"></a></h5>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+
+
+
+
+            <!-- comments section -->
+            <section style="background-color: #eee;">
+                <div class="container my-5 py-5">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-11 col-lg-11 col-xl-11">
+                            <div class="card">
+                                <div class="m-3">
+                                    {% for items in comment %}
+
+                                    <div class="card-body p-0">
+                                        <div class="d-flex flex-start align-items-center">
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                src="/{{items.comment.user.userprofile.profilePic}}" alt="avatar"
+                                                width="60" height="60" />
+                                            <div>
+                                                <h6 class="fw-bold text-primary mb-1">
+                                                    {{items.comment.user.first_name}}&nbsp{{items.comment.user.last_name}}
+                                                </h6>
+                                                <p class="text-muted small mb-0">
+                                                    Shared publicly - {{items.comment.creation_date}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p class="mt-3 mb-3">
+                                            {{items.comment.comment}}
+                                        </p>
+
+                                        <div class="small d-flex justify-content-start">
+
+                                            <a href="/recipe/comment/like/?id={{items.comment.id}}&recipe={{data.id}}"
+                                                class="d-flex align-items-center me-3">
+                                                {% if items.like %}
+                                                <i class="fa-regular fa-heart me-2" style="color: #ef0303;;"></i>
+                                                {% else %}
+                                                <i class="fa-regular fa-heart me-2" style="color: #454545;;"></i>
+                                                {% endif %}
+
+                                                <p class="text-muted small mb-0">{{items.comment.likes}}</p>
+                                            </a>
+
+                                            <a href="/recipe/comment/dislike/?id={{items.comment.id}}&recipe={{data.id}}"
+                                                class="d-flex align-items-center me-3">
+                                                {% if items.dislike %}
+                                                <i class="fa-solid fa-thumbs-down me-2" style="color: #0064ef;"></i>
+                                                {% else %}
+                                                <i class="fa-solid fa-thumbs-down me-2" style="color: #454545;"></i>
+                                                {% endif %}
+                                                <p class="text-muted small mb-0">{{items.comment.dislikes}}</p>
+                                            </a>
+                                            {% if items.comment.user == user %}
+                                            <a href="/recipe/comment/delete/?id={{items.comment.id}}&recipe={{data.id}}"
+                                                class="d-flex align-items-center me-3">
+                                                <i class="fa-solid fa-trash me-2" style="color: #454545;"></i>
+                                                <p class="mb-0">Delete</p>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <hr>
+
+
+                                    {% endfor %}
+                                </div>
+
+                                <form action="/recipe/comment/" method="post" id="comments">
+                                    {% csrf_token %}
+                                    <div class="card-footer py-3 border-0">
+                                        <div class="d-flex flex-start w-100">
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                src="/{{user.userprofile.profilePic}}" alt="avatar" width="40"
+                                                height="40" />
+                                            <div class="form-outline w-100">
+                                                <textarea class="form-control" id="textAreaExample" rows="4"
+                                                    style="background: #fff;" placeholder="write a comment..." required
+                                                    name="comment"></textarea>
+                                                <label class="form-label" for="textAreaExample">Message</label>
+                                            </div>
+                                        </div>
+                                        <div class="float-end mt-2 py-1">
+                                            <input type="hidden" name="recipe" value="{{data.id}}">
+                                            <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+                                            <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- comment section ends -->
+        </div>
+
+
+
+        <div class="col-lg-4">
+            <div class="px-0 border rounded-2 shadow-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Similar items</h5>
+                        {% if data.similar_items %}
+
+                        {% for items in data.similar_items %}
+
+                        {% if items.name == data.name %}
+
+                        {% else %}
+                        <a href="/recipe/description/?id={{items.id}}">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3">
+                                    <img src="{{items.thumbnail}}" style="min-width: 96px; height: 96px;"
+                                        class="img-md img-thumbnail" />
+                                </div>
+                                <div class="info">
+                                    {{items.name}}
+                                </div>
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <h3 style="color: grey; margin:13%">No records found :(</h3>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <!-- Report Section -->
+            <div class="accordion mt-4" style="z-index: 1; position: relative;" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <img src="/static/report.png" alt="report"
+                                style="width: 3rem;mix-blend-mode: multiply; ">&nbsp
+
+                            Report this Recipe
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+
+                            <form action="/recipe/report/" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <input type="hidden" name="id" value="{{data.id}}">
+                                    <label class=" px-3" style="float: left;" for="exampleFormControlTextarea1">
+                                        Describe what's wrong : <span class="text-danger"> *</span></label>
+                                    <textarea class="form-control" required style="max-height: 300px; height: 100px;"
+                                        id="exampleFormControlTextarea1" name='description'></textarea>
+                                </div>
+                                <button class="btn btn-danger mt-2" onclick="reportalert()" type="submit"
+                                    style="width: 100%;">Report Recipe</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Section end-->
+
+            <!-- star rating -->
+            <div class="ratings py-4">
+                <div class="container d-flex justify-content-center mt-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="stars">
+                                <center>
+                                    <p class="mb-0">Rate this Recipe: </p>
+                                </center>
+                                <form action="/recipe/giveRating/" method="post">
+
+                                    {% csrf_token %}
+                                    <div>
+                                        <input type="hidden" name="id" value="{{data.id}}">
+                                        <input class="star star-5" value="5" id="star-5" type="radio" name="star" />
+                                        <label class="star star-5" for="star-5"></label>
+                                        <input class="star star-4" value="4" id="star-4" type="radio" name="star" />
+                                        <label class="star star-4" for="star-4"></label>
+                                        <input class="star star-3" value="3" id="star-3" type="radio" name="star" />
+                                        <label class="star star-3" for="star-3"></label>
+                                        <input class="star star-2" value="2" id="star-2" type="radio" name="star" />
+                                        <label class="star star-2" for="star-2"></label>
+                                        <input class="star star-1" value="1" id="star-1" type="radio" name="star" />
+                                        <label class="star star-1" for="star-1"></label>
+                                    </div>
+                                    <div>
+                                        <button onclick="reviewalert()" class="btn btn-warning w-100"
+                                            type="submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- star rating ends -->
+
+
+        </div>
+
+    </div>
+
+
+    </div>
+</section>
+
+
+
+
+<script>
+
+    function addtofavourite(id) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Added to favourite',
+            showConfirmButton: false,
+            timer: 1500,
+
+        }).then(res => {
+            window.open(`/add/tofavourite/?id=${id}`, '_self');
+
+        })
+    }
+
+    function reviewalert() {
+
+        Swal.fire({
+            icon: 'success',
+            title: ' Review  submitted!!!',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+
+
+
+    function reportalert() {
+        txtarea = document.getElementById("exampleFormControlTextarea1").value
+        console.log(111, txtarea)
+        if (txtarea === '') {
+            console.log("in if")
+            Swal.fire({
+                title: 'Please write something!!!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+        else {
+            Swal.fire({
+                icon: 'success',
+                title: ' Review  submitted!!!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    }
+</script>
+{% endblock %}

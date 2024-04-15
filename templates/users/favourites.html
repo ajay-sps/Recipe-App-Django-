@@ -1,0 +1,134 @@
+{% extends "users/navbar.html" %}
+
+{% block content %}
+<style>
+
+  .product-rating{
+  
+  font-size: 35px;
+  }
+  
+  .stars i{
+  
+  font-size: 18px;
+  color: #cad100;
+  }
+  
+  </style>
+<div class="container pt-4" style="background-color: #E7E9EB;">
+  <nav class="d-flex">
+      <h6 class="mb-0">
+          <a href="/home">Home</a>
+          <span class=" mx-2"> > </span>
+         <u>My favourites</u>
+      </h6>
+  </nav>
+</div>
+
+{% if data %}
+
+
+<section style="background-color: #eee;">
+  
+    <div class="container py-5">
+      <div class="row p-1">
+        <h4>Favourite Recipes :</h4>
+        <hr>
+      </div>
+
+      {% for item in data %}
+      
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-12 col-xl-10">
+          <div class="card shadow-0 border rounded-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                  <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                    <img src="{{item.recipe.thumbnail}}"
+                      class="w-75"  style="max-height: 13rem;"/>
+                    <a href="#!">
+                      <div class="hover-overlay">
+                        <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-xl-6">
+                  <h5>{{item.recipe.name}}</h5>
+                  <div class="ratings">
+                    <div class="d-flex align-items-center">
+                        <div>
+                        <span class="product-rating">{{item.recipe.calculated_rating}}</span>
+                        <span>/5</span>
+                        </div>
+                        <img class="px-2" src="https://img.icons8.com/?size=512&id=19417&format=png" style="height:3rem">
+                    </div>
+                    <!-- <div class="star">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </div> -->
+
+                    <div class="rating-text">
+                        <span>ratings & reviews</span>
+                    </div><br>
+                </div>
+
+                  <h6 class="text-truncate mb-4 mb-md-0">
+                    Category : {{item.recipe.category_name}}
+                  </h6>
+                </div>
+                <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">        
+                  <div class="d-flex flex-column mt-4">
+                    <a href="/recipe/description/?id={{item.recipe.id}}" target="_blank"><button class="btn btn-warning w-100"  type="button">View Details</button></a>
+                    <button class="btn btn-outline-danger  mt-2" type="button" onclick="DeleteRecipe('{{item.id}}')">
+                      Remove from Favourites
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </section>
+
+  {% else %}
+  <h3 style="color: grey; margin:13%">No records found :(</h3>
+  {% endif %}
+
+
+  <script>
+    function DeleteRecipe(id){
+ 
+         Swal.fire({
+         title: 'Are you sure?',
+         text: "You won't be able to revert this!",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+         if (result.isConfirmed) {
+             Swal.fire(
+             'Deleted!',
+             'Your file has been deleted.',
+             'success'
+             ).then(() => {
+                window.open(`/favourites/delete/?id=${id}`,'_self')
+                }
+             )
+         }
+         })
+    }
+ </script>
+
+  {% endblock %}

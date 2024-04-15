@@ -1,0 +1,136 @@
+{% extends 'users/navbar.html' %}
+
+{% block content %}
+<style>
+  H5{
+    margin-bottom:0px;
+  }
+</style>
+
+<div class="row">
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if messages %}
+        {% for message in messages %}
+        <center>
+            <h6 style="color: green; padding: 2rem;">{{message}}</h6>
+        </center>
+        {% endfor %}
+        {% endif %}
+        <div class="card" style="padding: 2%; border-radius:20px ; margin:2% 18% ;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <div class="card-body">
+                <div class="p-2" style="text-align: center;"><h3>Request a New Recipe</h3></div><hr>
+                <div class="row mt-5">
+                    <div class="mb-4">
+                    {% for i,j in errors.items %}
+                    <center>
+                        <h6 style="color: red;">{{j.0}}</h6>
+                    </center>
+                    {% endfor %}
+                    <center>
+                        <h6 style="color: green;">{{message}}</h6>
+                    </center>
+                  
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <h6>Recipe Name :</h6>
+                            <input type="text" class="form-control" id="category_name" name="name"
+                                placeholder="Enter Recipe name">
+                        </div>
+                    </div>
+                    <div class="col-sm-5 offset-sm-1">
+                        <div class="form-group">
+                            <h6>Describe :</h6>
+                           
+                            <textarea class="form-control" name="description" cols="40" rows="4" style="max-height: 300px; padding:10px;  width: -webkit-fill-available;" required></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-9 offset-sm-1">
+                        <button type="submit" class="btn btn-primary" style="width:110%; margin-top: 3rem;border: none; background-color:var(--orange); ">Send
+                            Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row p-5" >
+    <h3>My Previous Requests :</h3>
+    <hr>
+
+    {% if data.results %}
+    {% for item in data.results %}
+
+    <div class="card m-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <p>Date : {{item.creation_date}}</p>
+
+        <div class="d-flex my-3 text-secondary"><h5>status:&nbsp</h5>
+          <h5 class="text-dark">{{item.status}}</h5>
+        </div> 
+
+
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Name: {{item.name}}</h5>
+        <p class="card-text">Description: {{item.description}}</p>
+        <a href="/delete/request/?id={{item.id}}" class="btn btn-primary">Delete Request</a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+<h3 style="color: grey; margin:13%">No records found :(</h3>
+{% endif %}
+
+  
+
+  
+    <!-- pagination -->
+  
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="?page=1">first</a></li>
+  
+        {% if data.recipe.previous %}
+  
+        <li class="page-item">
+          <a class="page-link" href="{{data.recipe.previous}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{data.page | add:'-1'}}">{{ data.page |
+            add:"-1" }}</a></li>
+  
+  
+  
+        <li class="page-item"><a class="page-link" href="#">{{data.page}}</a></li>
+        {% endif %}
+  
+        {% if data.recipe.next %}
+  
+        <li class="page-item"><a class="page-link" href="?page={{data.page | add:'+1'}}">{{data.page |add:"+1"}}</a></li>
+        <li class="page-item">
+          <a class="page-link" href="{{data.recipe.next}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="?page={{data.last_page}}">last</a></li>
+  
+      </ul>
+    </nav>
+  
+  </div>
+
+
+{% endblock %}

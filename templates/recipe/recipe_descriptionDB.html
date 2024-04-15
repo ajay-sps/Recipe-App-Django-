@@ -1,0 +1,222 @@
+<!-- Jumbotron -->
+
+{% extends 'navbar_sidebar.html' %}
+
+{% block content %}
+
+<!-- Jumbotron -->
+<style>
+     .product-rating {
+        font-size: 35px;
+    }
+
+    .star i {
+        font-size: 18px;
+        color: #cad100;
+    }
+</style>
+<!-- Heading -->
+<div>
+    <div class="container py-2" style="background-color: #E7E9EB;">
+        <nav class="d-flex">
+            <h6 class="mb-0">
+                <a href="/adminuser/recipe/">Recipes</a>
+                <span class=" mx-2"> > </span>
+               <u>Details</u>
+            </h6>
+        </nav>
+        <!-- Breadcrumb -->
+    </div>
+</div>
+<!-- Heading -->
+</header>
+{{errors}}
+<!-- content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row gx-5">
+            <aside class="col-lg-6">
+                <div class="d-flex justify-content-center align-items-center " style=" background-color: white; margin: 1rem 3rem; width: 26rem; height: 26rem;  border-radius: 15px;">
+
+                        <img style="width: 22rem; height: 22rem;  border-radius: 15px;"
+                            class=" fit" src="{{data.thumbnail}}" />
+                </div>
+            </aside>
+            <main class="col-lg-6">
+                <div class="ps-lg-3">
+                    <h4 class="title text-dark">
+                        {{data.name}}
+                    </h4>
+
+                    <div class="bg-warning p-2 rounded" style="background: rgb(209,226,0);
+                    background: linear-gradient(90deg, rgba(209,226,0,1) 0%, #fff6eb 99%);">
+                        <span class="h6">Category :</span>
+                        <span id="category">{{data.category}}</span>
+                    </div><br>
+                    <span class="h6">Author :</span>
+                    <span id="category">{{data.creator}}</span><br>
+                    <span class="h6">Date :</span>
+                    <span id="category">{{data.dateModified}}</span><br><br>
+                    
+                    <p>
+                        “Food for us comes from our relatives, whether they have wings or fins or roots. That is how we
+                        consider food. Food has a culture. It has a history. It has a story. It has relationships.” </p>
+
+                    <hr />
+                    <div class="ratings">
+                        <div class="d-flex align-items-center">
+                            <div>
+                            <span class="product-rating">{{data.calculated_rating}}</span>
+                            <span>/5</span>
+                            </div>
+                            <img class="px-2" src="https://img.icons8.com/?size=512&id=19417&format=png" style="height:3rem">
+                        </div>
+                        <!-- <div class="star">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div> -->
+
+                        <div class="rating-text">
+                            <span>{{data.review_count}} ratings & reviews</span>
+                        </div><br>
+                    </div>
+
+
+                    <!-- <div class="row">
+                        <dt class="col-3">Tags:</dt>
+                        <dd class="col-9">{{data.strTags}}</dd>
+                    </div> -->
+
+
+                    <hr/>
+
+                   {% if data.is_active == True %}
+                    <button class="btn btn-danger" onclick="DeleteRecipe()">Deactivate Now</button>
+                    {% else %}
+                    <button class="btn btn-success" onclick="DeleteRecipe()">Activate Now</button>
+                    {% endif %}
+                    
+
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+<!-- content -->
+
+
+
+
+<section class="bg-light border-top py-4">
+    <div class="container">
+        <div class="row gx-4">
+            <div class="col-lg-8 mb-4">
+                <div class="border rounded-2 px-3 py-2 bg-white">
+                    <!-- Pills navs -->
+
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description" style="box-shadow: none; width: 48%; margin: 0% 1%; background-color: rgb(231, 84, 43); border:none"">Instructions</button>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#ingredients" aria-expanded="true" aria-controls="description ingredients" style="box-shadow: none; width: 48%; background-color: rgb(231, 84, 43); border:none"">Ingredients</button>
+                    <div class="collapse multi-collapse show" id="description">
+                        <div class="card card-body">
+                            {{data.description}}
+                         </div>
+                    </div>
+                    <div class="collapse multi-collapse show" id="ingredients">
+                        <div class="card card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Ingredient</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col"></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for k,v in data.ingredients.items %}
+                                  <tr>
+                                    <th scope="row">{{k}}</th>
+                                    <td>{{v}}</td> 
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                         </div>
+                    </div>
+                    <!-- Pills content -->
+
+                </div>
+
+                    
+                
+
+
+
+
+
+            </div>
+
+
+
+            <div class="col-lg-4">
+                <div class="px-0 border rounded-2 shadow-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Similar items</h5>
+
+                            {% for items in data.similar_items %}
+
+                            {% if items.name == data.name %}
+
+                            {% else%}
+                            <a
+                                href="/adminuser/recipe/description/?id={{items.id}}">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3">
+                                        <img src="{{items.thumbnail}}" style="min-width: 96px; height: 96px;"
+                                            class="img-md img-thumbnail" />
+                                    </div>
+                                    <div class="info">
+                                        {{items.name}}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+   function DeleteRecipe(){
+
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change status!'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+            'Updated!',
+            'Your recipe status has been updated',
+            'success'
+            ).then(() => {
+                window.open("/adminuser/delete/recipe/?id={{data.id}}")
+            }
+            )
+        }
+        })
+
+   }
+
+</script>
+{% endblock %}

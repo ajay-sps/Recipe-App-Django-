@@ -1,0 +1,58 @@
+{% extends 'navbar_sidebar.html' %}
+
+{% block content %}
+
+<h2 >Update Ingredient</h2>
+
+<div class="row">
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card" style="padding: 2%; border-radius:20px ; margin-right:10% ;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <div class="card-body">
+                <div class="row">
+
+                    {% for i,j in errors.items %}
+                    <center>
+                        <h6 style="color: red;">{{j.0}}</h6>
+                    </center>
+                    {% endfor %}
+                    <center>
+                        <h6 style="color: green;">{{message}}</h6>
+                    </center>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <center>
+                        <h6 style="color: green;">{{message}}</h6>
+                    </center>
+                    {% endfor %}
+                    {% endif %}
+
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <h6>Ingredient Name </h6>
+                            <input type="text" class="form-control" id="ingredient_name" name="ingredient_name"
+                                placeholder="Enter ingredient name" value="{{formdata.name}}" required pattern="[a-zA-Z]+">
+                        </div>
+                    </div>
+                    <div class="col-sm-5 offset-sm-2">
+                        <div class="form-group">
+                            <h6>Ingredient Image</h6><br>
+                            <input type="file"  id="ingredient_image" name="ingredient_image">                                
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-9 offset-sm-1">
+                        <button type="submit" class="btn btn-primary" style="width:110%; margin-top: 3rem;">Update
+                            ingredient</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

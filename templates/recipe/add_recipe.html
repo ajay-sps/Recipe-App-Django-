@@ -1,0 +1,126 @@
+{% extends 'navbar_sidebar.html' %}
+{% block content %}
+<style>
+    /* body {
+        background-color: #eee;
+        font-family: "Poppins", sans-serif;
+        font-weight: 300;
+    } */
+
+
+    .search {
+        position: relative;
+        /* box-shadow: 0 0 40px rgba(51, 51, 51, .1); */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .search input {
+        height: 60px;
+        text-indent: 25px;
+        border: 2px solid #d6d4d4;
+    }
+
+    .search input:focus {
+        box-shadow: none;
+        border: 2px solid rgb(255, 136, 0);
+    }
+    .card {
+        box-shadow: 0 5px 10px rgb(2 2 2 / 0.2);
+    }
+    .card:hover {
+    /* box-shadow: 0 0 5px 5px rgb(241, 241, 241); */
+        transform: translate(0px,-10px);
+        transition: transform 0.4s ease;
+    }
+    .search .fa-search {
+        position: absolute;
+        top: 20px;
+        left: 16px;
+    }
+
+    .search button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        height: 50px;
+        width: 110px;
+        background: rgb(255, 136, 0);
+
+    }
+</style>
+
+<div class=" m-3" style="background-color: #E7E9EB;">
+    <div class="container py-2">
+        <!-- Breadcrumb -->
+        <nav class="d-flex">
+            <h6 class="mb-0">
+                <a href="/adminuser/recipe/">Home</a>
+                <span class="text-black mx-2"> > </span>
+                <a >Add Recipe</a>
+                
+            </h6>
+        </nav>
+        <!-- Breadcrumb -->
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="row height d-flex justify-content-center align-items-center">
+    <div class="row">
+        <div class="col-sm-8 offset-sm-1">
+            <form method="post" action="/adminuser/add/recipe/">
+                {% csrf_token %}
+                <div class="search">
+                    <i class="fa fa-search"></i>
+                    <input type="text" id="ingredient" class="form-control" placeholder="Want to add a Recipe ?"
+                        name="mainIngredient" value="{{data.search_item}}">
+                    <button type="submit" class="btn btn-primary ">Search</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-sm"></div>
+    </div>
+    <div class="row">
+
+
+
+        {% if messages %}
+        {% for message in messages %}
+        <center>
+            <h6 style="color: rgb(255, 0, 0); padding: 2rem 0rem;">{{message}}</h6>
+        </center>
+        {% endfor %}
+        {% endif %}
+
+
+
+        {% for items in data.meals %}
+
+        <div  class="card col-sm-2 " style="margin: 1.5rem; padding: 0px; height: 100%; width: 15rem;"><a href="/adminuser/add/recipe/description/?idMeal={{items.idMeal}}&search_item={{data.search_item}}">
+            <img class="card-img-top " src="{{items.strMealThumb}}" style="border-radius: 5px;object-fit: contain;" alt="Dish Picture">
+            <div class="row h-50" style="padding: 8px;">
+                <div class="col-sm-9">
+                    <h6 class="card-text">{{items.strMeal}}</h6>
+                </div>
+                
+                    {% if items.exists %}
+                    <div class="col-sm-3 mr-1" title="Aready Exists">
+                    <i class="fa-solid fa-check"
+                            style="color: #ffffff; background-color: #039014; padding:5px 12px; margin: 5px 0px; border-radius: 5px;"></i>
+                   
+                    </div>
+                    {% else %} 
+                    <div class="col-sm-3 mr-1" title="Add to database">
+                    <i class="fa-solid fa-plus"
+                    style="color: #ffffff; background-color: #0d6efd; padding:5px 12px; margin: 5px 0px; border-radius: 5px;"></i>
+                    </div>
+                    {% endif %}
+            </div></a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
+
